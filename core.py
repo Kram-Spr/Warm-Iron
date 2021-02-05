@@ -18,7 +18,7 @@ class Screen():
         self.player_sprite = pygame.image.load('sprites\player.png')
         self.player_sprite = pygame.transform.scale(self.player_sprite, (320,320))
         self.win.blit(self.player_sprite, (50,300))
-        self.win.blit(plr_arm.roArm_line,plr_arm.orig_pos)
+        self.win.blit(plr_arm.rot_arm,plr_arm.orig_pos)
         pygame.display.update()
 
 class Arm():
@@ -30,14 +30,18 @@ class Arm():
         self.rotate()
 
     def rotate(self):
-        #rel_x, rel_y = self.mouse_x - 1500, self.mouse_y - 750
-        #angle = (180 / math.pi) * -math.atan2(rel_y, rel_x)
         rel_x, rel_y = pygame.mouse.get_pos() - pygame.math.Vector2(130,500)
         angle = -math.degrees(math.atan2(rel_y, rel_x))
-        self.roArm_line = pygame.transform.rotate(self.arm_line, int(angle))
-        self.orig_pos = self.arm_line.get_rect(center = self.arm_line.get_rect().center)
-        self.orig_pos = self.orig_pos.move(130,500)
-        #Rectangle blitted to is not moving alongside line? creating cap?
+        print(angle)
+        if angle < 45 and angle > -45:
+            self.rot_arm = pygame.transform.rotate(self.arm_line, int(angle))
+            self.orig_pos = self.rot_arm.get_rect(center=(150,510))
+        elif angle > 45:
+            self.rot_arm = pygame.transform.rotate(self.arm_line, 45)
+            self.orig_pos = self.rot_arm.get_rect(center=(150,510))
+        elif angle < -45:
+            self.rot_arm = pygame.transform.rotate(self.arm_line, -45)
+            self.orig_pos = self.rot_arm.get_rect(center=(150,510))
 
 def main():
     running = True
